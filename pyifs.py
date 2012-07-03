@@ -57,7 +57,15 @@ class Transform(object):
         return r, g, b
 
 
-class Moebius(Transform):
+class ComplexTransform(Transform):
+    
+    def transform(self, px, py):
+        z = complex(px, py)
+        z2 = self.f(z)
+        return z2.real, z2.imag
+
+
+class Moebius(ComplexTransform):
     
     def __init__(self):
         super(Moebius, self).__init__()
@@ -65,11 +73,9 @@ class Moebius(Transform):
         self.pre_b = complex(random.random() * 2 - 1, random.random() * 2 - 1)
         self.pre_c = complex(random.random() * 2 - 1, random.random() * 2 - 1)
         self.pre_d = complex(random.random() * 2 - 1, random.random() * 2 - 1)
-
-    def transform(self, px, py):
-        z = complex(px, py)
-        z2 = (self.pre_a * z + self.pre_b) / (self.pre_c * z + self.pre_d)
-        return z2.real, z2.imag
+    
+    def f(self, z):
+        return (self.pre_a * z + self.pre_b) / (self.pre_c * z + self.pre_d)
 
 
 class MoebiusBase(Transform):
@@ -93,7 +99,7 @@ class MoebiusBase(Transform):
         return z2.real, z2.imag
 
 
-class InverseJulia(Transform):
+class InverseJulia(ComplexTransform):
     
     def __init__(self):
         super(InverseJulia, self).__init__()
@@ -106,11 +112,6 @@ class InverseJulia(Transform):
         theta = atan2(z2.imag, z2.real) * 0.5
         sqrt_r = random.choice([1, -1]) * ((z2.imag * z2.imag + z2.real * z2.real) ** 0.25)
         return complex(sqrt_r * cos(theta), sqrt_r * sin(theta))
-    
-    def transform(self, px, py):
-        z = complex(px, py)
-        z = self.f(z)
-        return z.real, z.imag
 
 
 ifs = IFS()
