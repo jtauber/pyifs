@@ -57,6 +57,18 @@ class Transform(object):
         return r, g, b
 
 
+class Linear(Transform):
+    def __init__(self):
+        super(Linear, self).__init__()
+        self.a = random.random() * 2 - 1
+        self.b = random.random() * 2 - 1
+        self.c = random.random() * 2 - 1
+        self.d = random.random() * 2 - 1
+            
+    def transform(self, px, py):
+        return (self.a * px + self.b * py, self.c * px + self.d * py)
+
+
 class ComplexTransform(Transform):
     
     def transform(self, px, py):
@@ -117,7 +129,7 @@ class InverseJulia(ComplexTransform):
 ifs = IFS()
 
 for n in range(NUM_TRANSFORMS):
-    cls = random.choice([InverseJulia, Moebius, InverseJulia])
+    cls = random.choice([Linear, Moebius])
     ifs.add(cls())
 
 
