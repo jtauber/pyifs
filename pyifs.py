@@ -14,6 +14,10 @@ NUM_TRANSFORMS = 7
 h = Image(WIDTH, HEIGHT)
 
 
+def random_complex():
+    return complex(random.uniform(-1, 1), random.uniform(-1, 1))
+
+
 class IFS:
     
     def __init__(self):
@@ -60,10 +64,10 @@ class Transform(object):
 class Linear(Transform):
     def __init__(self):
         super(Linear, self).__init__()
-        self.a = random.random() * 2 - 1
-        self.b = random.random() * 2 - 1
-        self.c = random.random() * 2 - 1
-        self.d = random.random() * 2 - 1
+        self.a = random.uniform(-1, 1)
+        self.b = random.uniform(-1, 1)
+        self.c = random.uniform(-1, 1)
+        self.d = random.uniform(-1, 1)
             
     def transform(self, px, py):
         return (self.a * px + self.b * py, self.c * px + self.d * py)
@@ -81,10 +85,10 @@ class Moebius(ComplexTransform):
     
     def __init__(self):
         super(Moebius, self).__init__()
-        self.pre_a = complex(random.random() * 2 - 1, random.random() * 2 - 1)
-        self.pre_b = complex(random.random() * 2 - 1, random.random() * 2 - 1)
-        self.pre_c = complex(random.random() * 2 - 1, random.random() * 2 - 1)
-        self.pre_d = complex(random.random() * 2 - 1, random.random() * 2 - 1)
+        self.pre_a = random_complex()
+        self.pre_b = random_complex()
+        self.pre_c = random_complex()
+        self.pre_d = random_complex()
     
     def f(self, z):
         return (self.pre_a * z + self.pre_b) / (self.pre_c * z + self.pre_d)
@@ -94,14 +98,14 @@ class MoebiusBase(ComplexTransform):
     
     def __init__(self):
         super(MoebiusBase, self).__init__()
-        self.pre_a = complex(random.random() * 2 - 1, random.random() * 2 - 1)
-        self.pre_b = complex(random.random() * 2 - 1, random.random() * 2 - 1)
-        self.pre_c = complex(random.random() * 2 - 1, random.random() * 2 - 1)
-        self.pre_d = complex(random.random() * 2 - 1, random.random() * 2 - 1)
-        self.post_a = complex(random.random() * 2 - 1, random.random() * 2 - 1)
-        self.post_b = complex(random.random() * 2 - 1, random.random() * 2 - 1)
-        self.post_c = complex(random.random() * 2 - 1, random.random() * 2 - 1)
-        self.post_d = complex(random.random() * 2 - 1, random.random() * 2 - 1)
+        self.pre_a = random_complex()
+        self.pre_b = random_complex()
+        self.pre_c = random_complex()
+        self.pre_d = random_complex()
+        self.post_a = random_complex()
+        self.post_b = random_complex()
+        self.post_c = random_complex()
+        self.post_d = random_complex()
     
     def f(self, z):
         z2 = (self.pre_a * z + self.pre_b) / (self.pre_c * z + self.pre_d)
@@ -133,8 +137,8 @@ for n in range(NUM_TRANSFORMS):
 
 for i in range(NUM_POINTS):
     print i
-    px = random.random() * 2 - 1
-    py = random.random() * 2 - 1
+    px = random.uniform(-1, 1)
+    py = random.uniform(-1, 1)
     r, g, b = 0.0, 0.0, 0.0
     
     for j in range(ITERATIONS):
