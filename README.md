@@ -8,3 +8,4 @@ The tone-mapped image handling comes from Minilight.
 NOTE: I strongly recommend using PyPy to run this.
 
 ![example IFS](http://github.com/jtauber/pyifs/raw/master/example.png)
+![example IFS2](http://github.com/jtauber/pyifs/raw/master/example2.png)
