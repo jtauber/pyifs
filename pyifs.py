@@ -90,7 +90,7 @@ class Moebius(ComplexTransform):
         return (self.pre_a * z + self.pre_b) / (self.pre_c * z + self.pre_d)
 
 
-class MoebiusBase(Transform):
+class MoebiusBase(ComplexTransform):
     
     def __init__(self):
         super(MoebiusBase, self).__init__()
@@ -103,12 +103,10 @@ class MoebiusBase(Transform):
         self.post_c = complex(random.random() * 2 - 1, random.random() * 2 - 1)
         self.post_d = complex(random.random() * 2 - 1, random.random() * 2 - 1)
     
-    def transform(self, px, py):
-        z = complex(px, py)
+    def f(self, z):
         z2 = (self.pre_a * z + self.pre_b) / (self.pre_c * z + self.pre_d)
-        z = self.f(z2)
+        z = self.f2(z2)
         z2 = (self.post_a * z + self.post_b) / (self.post_c * z + self.post_d)
-        return z2.real, z2.imag
 
 
 class InverseJulia(ComplexTransform):
