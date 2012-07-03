@@ -1,0 +1,140 @@
+import random
+from math import cos, sin, pi, atan2, sqrt
+
+from image import Image
+
+
+WIDTH = 512
+HEIGHT = 512
+ITERATIONS = 10000
+NUM_POINTS = 1000
+NUM_TRANSFORMS = 7
+
+
+h = Image(WIDTH, HEIGHT)
+
+
+class IFS:
+    
+    def __init__(self):
+        self.transforms = []
+        self.total_weight = 0
+    
+    def add(self, transform):
+        weight = random.gauss(1, 0.15) * random.gauss(1, 0.15)
+        self.total_weight += weight
+        self.transforms.append((weight, transform))
+    
+    def choose(self):
+        w = random.random() * self.total_weight
+        running_total = 0
+        for weight, transform in self.transforms:
+            running_total += weight
+            if w <= running_total:
+                return transform
+    
+    def final_transform(self, px, py):
+        a = 0.5
+        b = 0
+        c = 0
+        d = 1
+        z = complex(px, py)
+        z2 = (a * z + b) / (c * z + d)
+        return z2.real, z2.imag
+
+
+class Transform(object):
+    
+    def __init__(self):
+        self.r = random.random()
+        self.g = random.random()
+        self.b = random.random()
+    
+    def transform_colour(self, r, g, b):
+        r = (self.r + r) / 2
+        g = (self.g + g) / 2
+        b = (self.b + b) / 2
+        return r, g, b
+
+
+class Moebius(Transform):
+    
+    def __init__(self):
+        super(Moebius, self).__init__()
+        self.pre_a = complex(random.random() * 2 - 1, random.random() * 2 - 1)
+        self.pre_b = complex(random.random() * 2 - 1, random.random() * 2 - 1)
+        self.pre_c = complex(random.random() * 2 - 1, random.random() * 2 - 1)
+        self.pre_d = complex(random.random() * 2 - 1, random.random() * 2 - 1)
+
+    def transform(self, px, py):
+        z = complex(px, py)
+        z2 = (self.pre_a * z + self.pre_b) / (self.pre_c * z + self.pre_d)
+        return z2.real, z2.imag
+
+
+class MoebiusBase(Transform):
+    
+    def __init__(self):
+        super(MoebiusBase, self).__init__()
+        self.pre_a = complex(random.random() * 2 - 1, random.random() * 2 - 1)
+        self.pre_b = complex(random.random() * 2 - 1, random.random() * 2 - 1)
+        self.pre_c = complex(random.random() * 2 - 1, random.random() * 2 - 1)
+        self.pre_d = complex(random.random() * 2 - 1, random.random() * 2 - 1)
+        self.post_a = complex(random.random() * 2 - 1, random.random() * 2 - 1)
+        self.post_b = complex(random.random() * 2 - 1, random.random() * 2 - 1)
+        self.post_c = complex(random.random() * 2 - 1, random.random() * 2 - 1)
+        self.post_d = complex(random.random() * 2 - 1, random.random() * 2 - 1)
+    
+    def transform(self, px, py):
+        z = complex(px, py)
+        z2 = (self.pre_a * z + self.pre_b) / (self.pre_c * z + self.pre_d)
+        z = self.f(z2)
+        z2 = (self.post_a * z + self.post_b) / (self.post_c * z + self.post_d)
+        return z2.real, z2.imag
+
+
+class InverseJulia(Transform):
+    
+    def __init__(self):
+        super(InverseJulia, self).__init__()
+        r = sqrt(random.random()) * 0.4 + 0.8
+        theta = 2 * pi * random.random()
+        self.c = complex(r * cos(theta), r * sin(theta))
+    
+    def f(self, z):
+        z2 = self.c - z
+        theta = atan2(z2.imag, z2.real) * 0.5
+        sqrt_r = random.choice([1, -1]) * ((z2.imag * z2.imag + z2.real * z2.real) ** 0.25)
+        return complex(sqrt_r * cos(theta), sqrt_r * sin(theta))
+    
+    def transform(self, px, py):
+        z = complex(px, py)
+        z = self.f(z)
+        return z.real, z.imag
+
+
+ifs = IFS()
+
+for n in range(NUM_TRANSFORMS):
+    cls = random.choice([InverseJulia, Moebius, InverseJulia])
+    ifs.add(cls())
+
+
+for i in range(NUM_POINTS):
+    print i
+    px = random.random() * 2 - 1
+    py = random.random() * 2 - 1
+    r, g, b = 0.0, 0.0, 0.0
+    
+    for j in range(ITERATIONS):
+        t = ifs.choose()
+        px, py = t.transform(px, py)
+        r, g, b = t.transform_colour(r, g, b)
+        
+        fx, fy = ifs.final_transform(px, py)
+        x = int((fx + 1) * WIDTH / 2)
+        y = int((fy + 1) * HEIGHT / 2)
+
+        h.add_radiance(x, y, [r, g, b])
+
+h.save("test.png", max(1, (NUM_POINTS * ITERATIONS) / (HEIGHT * WIDTH)))
