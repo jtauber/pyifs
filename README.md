@@ -45,3 +45,5 @@ Examples
 
 ![example IFS](http://github.com/jtauber/pyifs/raw/master/example.png)
 ![example IFS2](http://github.com/jtauber/pyifs/raw/master/example2.png)
+![example IFS3](http://github.com/jtauber/pyifs/raw/master/example3.png)
+![example IFS4](http://github.com/jtauber/pyifs/raw/master/example4.png)
