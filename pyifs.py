@@ -4,6 +4,7 @@ from math import cos, sin, pi, atan2, sqrt
 from image import Image
 
 
+# CUSTOMIZE
 WIDTH = 512
 HEIGHT = 512
 ITERATIONS = 10000
@@ -128,10 +129,15 @@ class InverseJulia(ComplexTransform):
         return complex(sqrt_r * cos(theta), sqrt_r * sin(theta))
 
 
+# CUSTOMIZE by implementing new transforms
+
+# CUSTOMIZE
+TRANSFORM_CHOICES = [Linear, Moebius]
+
 ifs = IFS()
 
 for n in range(NUM_TRANSFORMS):
-    cls = random.choice([Linear, Moebius])
+    cls = random.choice(TRANSFORM_CHOICES)
     ifs.add(cls())
 
 
