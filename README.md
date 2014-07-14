@@ -43,7 +43,7 @@ argument and returns anew complex number.
 Examples
 --------
 
-![example IFS](http://github.com/jtauber/pyifs/raw/master/example.png)
-![example IFS2](http://github.com/jtauber/pyifs/raw/master/example2.png)
-![example IFS3](http://github.com/jtauber/pyifs/raw/master/example3.png)
-![example IFS4](http://github.com/jtauber/pyifs/raw/master/example4.png)
+![example IFS](https://raw.githubusercontent.com/jtauber/pyifs/master/example.png)
+![example IFS2](https://raw.githubusercontent.com/jtauber/pyifs/master/example2.png)
+![example IFS3](https://raw.githubusercontent.com/jtauber/pyifs/master/example3.png)
+![example IFS4](https://raw.githubusercontent.com/jtauber/pyifs/master/example4.png)
